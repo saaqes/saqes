@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>saqes — web urbana</title>
-<meta name="description" content="saqes — galería, conexiones y contacto. estilo urbano.">
+<meta name="description" content="saqes — galería y conexiones. estilo urbano.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.85em' font-size='86' font-family='Arial' font-weight='bold' fill='%237C3AED'%3ES%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,11 +29,12 @@
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
+/* nada se desborda a los lados (arregla el scroll lateral en teléfono) */
+html,body{overflow-x:hidden;overflow-x:clip;max-width:100%}
 body{
   background:var(--bg);
   color:var(--tinta);
   font-family:"Space Grotesk",system-ui,sans-serif;
-  overflow-x:hidden;
 }
 ::selection{background:var(--morado-4);color:#fff}
 ::-webkit-scrollbar{width:11px}
@@ -81,9 +82,11 @@ nav.scrolled::after{
 /* ============ LOGO "saqes" (tu graffiti — se encoge hasta el navbar) ============ */
 #logoSaqes{
   position:fixed;left:0;top:0;z-index:94;
-  width:clamp(250px,52vw,620px);aspect-ratio:259/109;
+  width:clamp(250px,52vw,620px);max-width:92vw;aspect-ratio:259/109;
   cursor:pointer;user-select:none;
   filter:drop-shadow(0 12px 32px rgba(109,40,217,.55));
+  /* fallback vh primero (teléfonos viejos), svh después */
+  transform:translate(-50%,-50%) translate3d(50vw,36vh,0) rotate(-2deg);
   transform:translate(-50%,-50%) translate3d(50vw,36svh,0) rotate(-2deg);
   will-change:transform;
   animation:logoIn 1s cubic-bezier(.2,.7,.2,1) both;
@@ -98,7 +101,7 @@ nav.scrolled::after{
 
 /* ============ HERO / BANNER ============ */
 .hero{
-  position:relative;height:100svh;min-height:560px;
+  position:relative;height:100vh;height:100svh;min-height:560px;
   background:
     radial-gradient(70% 55% at 50% 108%, rgba(76,29,149,.5), transparent 70%),
     radial-gradient(40% 30% at 82% 10%, rgba(46,16,101,.35), transparent 70%),
@@ -107,7 +110,8 @@ nav.scrolled::after{
 }
 .hero-person{
   position:absolute;left:50%;bottom:0;z-index:95;pointer-events:none;
-  height:clamp(360px,64svh,680px);aspect-ratio:386/646;max-width:88vw;
+  height:clamp(360px,64vh,680px);height:clamp(360px,64svh,680px);
+  aspect-ratio:386/646;max-width:88vw;
   background:var(--foto) center bottom / contain no-repeat;
   transform:translate(-50%,0);
   filter:drop-shadow(0 -6px 40px rgba(0,0,0,.55));
@@ -116,19 +120,6 @@ nav.scrolled::after{
 }
 @keyframes personIn{from{opacity:0;transform:translate(-50%,46px)}to{opacity:1;transform:translate(-50%,0)}}
 
-.bubbles{position:absolute;inset:0;z-index:1;overflow:hidden}
-.bubble{
-  position:absolute;bottom:-50px;border-radius:50%;opacity:0;
-  background:radial-gradient(circle at 32% 28%, rgba(216,180,254,.95), rgba(139,92,246,.28) 58%, rgba(139,92,246,0) 72%);
-  box-shadow:0 0 16px rgba(139,92,246,.4), inset 0 0 6px rgba(237,234,245,.25);
-  animation:rise var(--dur) linear infinite;animation-delay:var(--delay);
-}
-@keyframes rise{
-  0%{transform:translate(0,0) scale(.9);opacity:0}
-  8%{opacity:var(--o)}
-  85%{opacity:var(--o)}
-  100%{transform:translate(var(--sway),-112svh) scale(1.1);opacity:0}
-}
 .scroll-cue{
   position:absolute;left:clamp(18px,4vw,44px);bottom:26px;z-index:96;
   width:58px;height:58px;display:block;color:var(--lila);opacity:.9;
@@ -153,17 +144,12 @@ nav.scrolled::after{
 @keyframes mq{to{transform:translateX(-50%)}}
 
 /* ============ SECCIONES BASE ============ */
-.section{position:relative;padding:clamp(90px,12vh,150px) clamp(18px,5vw,64px)}
+.section{position:relative;padding:clamp(90px,12vh,150px) clamp(18px,5vw,64px);overflow:hidden}
 .section-head{max-width:1200px;margin:0 auto 48px;position:relative}
 .eyebrow{
   font-family:"Permanent Marker",cursive;color:var(--lila);font-size:1rem;
   display:inline-block;transform:rotate(-1.5deg);margin-bottom:8px;
 }
-.title{
-  font-family:"Bebas Neue",sans-serif;font-size:clamp(3.4rem,9vw,7.5rem);
-  line-height:.9;letter-spacing:.02em;
-}
-.title em{font-style:normal;color:transparent;-webkit-text-stroke:2px var(--morado-4)}
 .title-tag{
   font-family:"Sedgwick Ave Display",cursive;font-weight:400;
   font-size:clamp(2.5rem,8vw,5.5rem);line-height:1.1;width:fit-content;
@@ -300,77 +286,12 @@ nav.scrolled::after{
 .c-tiktok{--brand:#FE2C55}.c-roblox{--brand:#E2231A}.c-ps{--brand:#0070D1}
 .c-steam{--brand:#66C0F4}.c-discord{--brand:#5865F2}
 
-/* ============ CONTÁCTAME ============ */
-#contactame{
-  background:radial-gradient(60% 70% at 50% 100%, rgba(76,29,149,.4), transparent 72%), var(--bg);
-  text-align:center;
-}
-.contact-box{max-width:850px;margin:0 auto;position:relative;z-index:1}
-.contact-box .title{font-size:clamp(2.9rem,7.5vw,6rem)}
-.contact-box p{color:var(--gris);max-width:52ch;margin:18px auto 40px}
-.btn-big{
-  display:inline-block;position:relative;
-  font-family:"Bebas Neue",sans-serif;font-size:1.7rem;letter-spacing:.14em;
-  color:#fff;background:var(--morado-3);padding:18px 54px;
-  transform:skewX(-8deg);border:2px solid #060409;
-  box-shadow:8px 8px 0 #060409, 8px 8px 0 1px rgba(167,139,250,.35);
-  transition:transform .2s, box-shadow .2s, background .2s;
-}
-.btn-big span{display:inline-block;transform:skewX(8deg)}
-.btn-big:hover{background:var(--morado-4);transform:skewX(-8deg) translate(3px,3px);box-shadow:4px 4px 0 #060409}
-
-/* ============ PANTALLA "ESTÁ EN PROCESO :)" ============ */
-#proceso{
-  position:fixed;inset:0;z-index:300;overflow:hidden;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:22px;text-align:center;padding:24px;
-  background:
-    radial-gradient(70% 55% at 50% 110%, rgba(76,29,149,.5), transparent 70%),
-    radial-gradient(40% 30% at 15% 8%, rgba(46,16,101,.4), transparent 70%),
-    var(--bg);
-  visibility:hidden;opacity:0;
-  transition:opacity .45s ease, visibility 0s linear .45s;
-}
-#proceso.open{visibility:visible;opacity:1;transition:opacity .45s ease}
-#proceso>*{position:relative;z-index:2}
-#proceso .bubbles{z-index:1}
-.pv-title{
-  font-family:"Sedgwick Ave Display",cursive;font-weight:400;
-  font-size:clamp(2.4rem,8vw,5.8rem);line-height:1.05;
-  background:linear-gradient(165deg,#8B5CF6 0%,#5B21B6 42%,#2E1065 100%);
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-  -webkit-text-stroke:1.5px rgba(196,181,253,.16);
-  filter:drop-shadow(0 10px 30px rgba(109,40,217,.5));
-  rotate:-2deg;
-}
-#proceso p{color:var(--gris);max-width:44ch}
-.ig{
-  display:inline-flex;align-items:center;gap:12px;
-  font-family:"Bebas Neue",sans-serif;font-size:1.35rem;letter-spacing:.12em;
-  background:var(--morado-3);color:#fff;padding:14px 34px;
-  transform:skewX(-8deg);border:2px solid #060409;
-  box-shadow:7px 7px 0 #060409, 7px 7px 0 1px rgba(167,139,250,.35);
-  transition:transform .2s, box-shadow .2s, background .2s;
-}
-.ig>*{transform:skewX(8deg)}
-.ig .ic{width:20px;height:20px}
-.ig:hover{background:var(--morado-4);transform:skewX(-8deg) translate(3px,3px);box-shadow:3px 3px 0 #060409}
-.volver{
-  margin-top:8px;color:var(--gris);font-size:.85rem;letter-spacing:.14em;text-transform:uppercase;
-  border-bottom:1px dashed rgba(167,139,250,.4);padding-bottom:3px;transition:color .25s;
-}
-.volver:hover{color:var(--lila)}
-#proceso .pop{
-  opacity:0;transform:translateY(26px);
-  transition:opacity .6s cubic-bezier(.2,.7,.2,1), transform .6s cubic-bezier(.2,.7,.2,1);
-  transition-delay:var(--d,0s);
-}
-#proceso.open .pop{opacity:1;transform:translateY(0)}
-
 /* ============ RESPONSIVE ============ */
 @media (max-width:760px){
   :root{--nav-h:62px}
-  .nav-links a{font-size:.68rem;letter-spacing:.1em}
+  .nav-links a{font-size:.72rem;letter-spacing:.1em}
+  /* el logo grande y centrado, como en pc */
+  #logoSaqes{width:min(78vw,360px)}
   .collage{grid-template-columns:repeat(6,1fr);grid-auto-rows:58px;gap:13px}
   .sz-chica{grid-column:span 3;grid-row:span 3}
   .sz-media{grid-column:span 4;grid-row:span 4}
@@ -383,11 +304,9 @@ nav.scrolled::after{
   .tape::before,.tape::after{width:58px;height:20px;top:-10px}
 }
 @media (prefers-reduced-motion:reduce){
-  .bubble,.marquee-track,.sticker,.scroll-cue svg{animation:none}
+  .marquee-track,.sticker,.scroll-cue svg{animation:none}
   #logoSaqes,.hero-person{animation:none}
   .reveal{transition:none;opacity:1;transform:none}
-  #proceso .pop{transition:none;opacity:1;transform:none}
-  #proceso{transition:none}
   html{scroll-behavior:auto}
 }
 </style>
@@ -413,9 +332,6 @@ nav.scrolled::after{
   <symbol id="i-discord" viewBox="0 0 24 24">
     <path fill="#5865F2" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/>
   </symbol>
-  <symbol id="i-instagram" viewBox="0 0 24 24">
-    <path fill="currentColor" d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/>
-  </symbol>
 </defs></svg>
 
 <!-- ═══════ NAVBAR FLOTANTE ═══════ -->
@@ -423,7 +339,6 @@ nav.scrolled::after{
   <div class="nav-links">
     <a href="#galeria">Galería</a>
     <a href="#conexiones">Conexiones</a>
-    <a href="#contactame">Contáctame</a>
   </div>
 </nav>
 
@@ -481,33 +396,23 @@ nav.scrolled::after{
   <div class="cards" id="cards"></div>
 </section>
 
-<!-- ═══════ CONTÁCTAME ═══════ -->
-<section id="contactame" class="section">
-  <div class="contact-box reveal">
-    <span class="eyebrow">el secreto</span>
-    <h2 class="title">¿QUIERES SABER CÓMO<br>HICE <em>ESTA PÁGINA</em>?</h2>
-    <p>las animaciones, las burbujas, el logo que se encoge, todo el código. si te da curiosidad, escríbeme y te cuento el proceso.</p>
-    <a class="btn-big" href="#proceso"><span>CONTÁCTAME ↗</span></a>
-  </div>
-</section>
-
-<!-- ═══════ PANTALLA "ESTÁ EN PROCESO :)" (se abre con el botón CONTÁCTAME) ═══════ -->
-<div id="proceso" role="dialog" aria-modal="true" aria-label="está en proceso">
-  <div class="bubbles" id="bubblesProceso" aria-hidden="true"></div>
-  <span class="eyebrow pop" style="--d:.05s">tranqui, ya casi</span>
-  <h2 class="pv-title pop" style="--d:.14s">está en proceso :)</h2>
-  <p class="pop" style="--d:.24s">esta parte todavía la estoy cocinando. mientras tanto, escríbeme por instagram y te cuento cómo hice la página.</p>
-  <!-- ⚠️ CAMBIA este link por tu Instagram real -->
-  <a class="ig pop" style="--d:.34s" href="https://www.instagram.com/" target="_blank" rel="noopener">
-    <svg class="ic" aria-hidden="true"><use href="#i-instagram"/></svg><span>@saqes</span>
-  </a>
-  <a class="volver pop" style="--d:.44s" href="#contactame">← volver</a>
-</div>
-
 <script>
+/* ═════════════════ FIREBASE ═════════════════
+   🔥 PEGA AQUÍ tu configuración de Firebase (mira README.md, paso 4).
+   Mientras diga "PEGA_AQUI", la página funciona en modo local (localStorage). */
+const FIREBASE_CONFIG = {
+  apiKey: "PEGA_AQUI",
+  authDomain: "PEGA_AQUI",
+  projectId: "PEGA_AQUI",
+  storageBucket: "PEGA_AQUI",
+  messagingSenderId: "PEGA_AQUI",
+  appId: "PEGA_AQUI"
+};
+const FB_ON = FIREBASE_CONFIG.projectId !== "PEGA_AQUI";
+
 /* ═════════════════ DATOS ═════════════════
    La galería y las conexiones se dibujan desde estos datos.
-   Puedes editarlos aquí, o mejor: desde admin.html (guarda en localStorage). */
+   Se editan desde admin.html (nube con Firebase, o localStorage en modo local). */
 const LS_KEY = 'saqes_config_v1';
 
 const DEF_GALERIA = [
@@ -534,35 +439,40 @@ const TILES = [
 ];
 const SIZES = {chica:'sz-chica', media:'sz-media', alta:'sz-alta', grande:'sz-grande', ancha:'sz-ancha'};
 
-/* ---------- config guardada desde admin.html ---------- */
-function getConfig(){
+/* ---------- reveal progresivo ---------- */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+  });
+}, { threshold: 0.12 });
+
+/* ---------- config local (respaldo) ---------- */
+function getLocal(){
   try{
     const c = JSON.parse(localStorage.getItem(LS_KEY) || 'null');
     if (c && Array.isArray(c.g) && Array.isArray(c.c)) return c;
   }catch(e){}
   return null;
 }
-const cfg = getConfig();
-const GALERIA = cfg ? cfg.g : DEF_GALERIA;
-const CONEX = DEF_CONEX.map(def => {
-  const saved = cfg && cfg.c.find(x => x.id === def.id);
-  return saved ? {...def, user:saved.user ?? def.user, url:saved.url ?? def.url, foto:saved.foto ?? null} : def;
-});
 const safeUrl = u => (typeof u === 'string' && (/^https?:\/\//i.test(u) || u.startsWith('#'))) ? u : '#';
+const mergeConex = saved => DEF_CONEX.map(def => {
+  const s = saved && saved.find(x => x.id === def.id);
+  return s ? {...def, user:s.user ?? def.user, url:s.url ?? def.url, foto:s.foto ?? null} : def;
+});
 
 /* ---------- render galería ---------- */
-function renderGaleria(){
+function renderGaleria(G){
   const wrap = document.getElementById('collage');
   wrap.textContent = '';
   let d = 0;
-  GALERIA.forEach((it, i) => {
+  G.forEach((it, i) => {
     const cell = document.createElement('div');
     cell.className = `it reveal ${SIZES[it.size] || 'sz-media'}`;
     cell.style.setProperty('--d', (d++ % 5 * .06 + .05) + 's');
 
     const frame = document.createElement('div');
     const conTape = it.tipo === 'polaroid' || it.tipo === 'morado';
-    frame.className = `frame f-${it.tipo}${conTape ? ' tape' : ''}`;
+    frame.className = `frame f-${it.tipo || 'polaroid'}${conTape ? ' tape' : ''}`;
     frame.style.transform = `rotate(${Number(it.rot) || 0}deg)`;
 
     const ph = document.createElement('div');
@@ -585,23 +495,25 @@ function renderGaleria(){
     }
     cell.appendChild(frame);
     wrap.appendChild(cell);
+    io.observe(cell);
 
-    if (i < GALERIA.length - 1){
+    if (i < G.length - 1){
       const t = TILES[i % TILES.length];
       const tc = document.createElement('div');
       tc.className = `it reveal ${t.size} ${t.cls}`;
       tc.style.setProperty('--d', (d++ % 5 * .06 + .05) + 's');
       tc.innerHTML = `<div class="frame" style="transform:rotate(${t.rot}deg)">${t.html}</div>`;
       wrap.appendChild(tc);
+      io.observe(tc);
     }
   });
 }
 
 /* ---------- render conexiones ---------- */
-function renderConex(){
+function renderConex(C){
   const wrap = document.getElementById('cards');
   wrap.textContent = '';
-  CONEX.forEach((c, i) => {
+  C.forEach((c, i) => {
     const card = document.createElement('div');
     card.className = `card ${c.cls} reveal`;
     card.style.setProperty('--d', (i * .05 + .05) + 's');
@@ -630,30 +542,44 @@ function renderConex(){
 
     card.append(aw, user, btn);
     wrap.appendChild(card);
+    io.observe(card);
   });
 }
 
-renderGaleria();
-renderConex();
+function applyConfig(cfg){
+  renderGaleria(cfg && cfg.g ? cfg.g : DEF_GALERIA);
+  renderConex(mergeConex(cfg ? cfg.c : null));
+}
+
+/* pinta ya con lo local, y si hay nube, actualiza cuando llegue */
+applyConfig(getLocal());
+document.querySelectorAll('.section-head.reveal').forEach(el => io.observe(el));
+
+async function fetchNube(){
+  if (!FB_ON) return null;
+  try{
+    const [{initializeApp}, fs] = await Promise.all([
+      import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js'),
+      import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js')
+    ]);
+    const db = fs.getFirestore(initializeApp(FIREBASE_CONFIG));
+    const gs = await fs.getDocs(fs.query(fs.collection(db, 'galeria'), fs.orderBy('orden')));
+    const cs = await fs.getDocs(fs.collection(db, 'conexiones'));
+    const g = gs.docs.map(d => d.data());
+    const c = cs.docs.map(d => ({id: d.id, ...d.data()}));
+    if (!g.length && !c.length) return null;
+    return {g: g.length ? g : null, c: c.length ? c : null};
+  }catch(e){
+    console.warn('firebase no disponible:', e);
+    return null;
+  }
+}
+fetchNube().then(r => { if (r) applyConfig(r); });
 
 /* ---------- carrusel infinito ---------- */
 const MQ = 'holaaaaaa xdd\u00a0\u00a0\u00a0 '.repeat(16);
 document.getElementById('mq1').textContent = MQ;
 document.getElementById('mq2').textContent = MQ;
-
-/* ---------- burbujas (solo en la pantalla "está en proceso") ---------- */
-function spawnBubbles(el, n){
-  for (let i = 0; i < n; i++) {
-    const b = document.createElement('span');
-    b.className = 'bubble';
-    const s = 6 + Math.random() * 24;
-    b.style.cssText = `left:${Math.random()*100}%;width:${s}px;height:${s}px;` +
-      `--dur:${7 + Math.random()*9}s;--delay:${-Math.random()*16}s;` +
-      `--sway:${(Math.random()*90 - 45)}px;--o:${.25 + Math.random()*.5}`;
-    el.appendChild(b);
-  }
-}
-spawnBubbles(document.getElementById('bubblesProceso'), matchMedia('(max-width:760px)').matches ? 14 : 22);
 
 /* ---------- logo: gigante → navbar / persona: se desvanece ---------- */
 const logo   = document.getElementById('logoSaqes');
@@ -674,7 +600,7 @@ function paint(){
   const mobile = innerWidth < 760;
   const navH   = mobile ? 62 : 74;
   const pad    = mobile ? 16 : 28;
-  const targetH= mobile ? 27 : 38;
+  const targetH= mobile ? 24 : 38;
 
   const t = Math.min(y / (heroH * 0.72), 1);
   const e = smooth(t);
@@ -708,27 +634,6 @@ addEventListener('load',   () => { measure(); paint(); });
 measure(); paint();
 
 logo.addEventListener('click', () => scrollTo({ top:0, behavior:'smooth' }));
-
-/* ---------- carga progresiva al hacer scroll ---------- */
-const io = new IntersectionObserver(entries => {
-  entries.forEach(en => {
-    if (en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
-  });
-}, { threshold: 0.12 });
-document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-
-/* ---------- pantalla "está en proceso :)" ---------- */
-const proceso = document.getElementById('proceso');
-function syncProceso(){
-  const open = location.hash === '#proceso';
-  proceso.classList.toggle('open', open);
-  document.body.style.overflow = open ? 'hidden' : '';
-}
-addEventListener('hashchange', syncProceso);
-addEventListener('keydown', e => {
-  if (e.key === 'Escape' && proceso.classList.contains('open')) location.hash = '#contactame';
-});
-syncProceso();
 </script>
 </body>
 </html>
