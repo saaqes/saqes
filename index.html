@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>saqes — web urbana</title>
-<meta name="description" content="saqes — galería y conexiones. estilo urbano.">
+<meta name="description" content="saqes — conexiones. estilo urbano.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.85em' font-size='86' font-family='Arial' font-weight='bold' fill='%237C3AED'%3ES%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -95,12 +95,10 @@ nav.scrolled::after{
 /* ============ HERO / BANNER ============ */
 .hero{
   position:relative;height:100vh;height:100svh;min-height:560px;
-  background:
-    radial-gradient(70% 55% at 50% 108%, rgba(76,29,149,.5), transparent 70%),
-    radial-gradient(40% 30% at 82% 10%, rgba(46,16,101,.35), transparent 70%),
-    var(--bg);
+  background:#000;
   overflow:hidden;
 }
+
 .hero-person{
   position:absolute;left:50%;bottom:0;z-index:95;pointer-events:none;
   height:clamp(360px,64vh,680px);height:clamp(360px,64svh,680px);
@@ -121,6 +119,35 @@ nav.scrolled::after{
 .scroll-cue svg{width:100%;height:100%;display:block;animation:cue 2.2s ease-in-out infinite}
 .scroll-cue:hover{color:#C4B5FD;transform:rotate(-2deg) scale(1.1)}
 @keyframes cue{0%,100%{transform:translateY(0)}50%{transform:translateY(9px)}}
+
+/* ============ BURBUJA DE TEXTO DEL BANNER ============
+   el texto se edita desde el <script> (busca "BUBBLE_TEXT"). */
+.speech-bubble{
+  position:absolute;z-index:97;pointer-events:none;
+  top:clamp(84px,16vh,168px);right:clamp(14px,7vw,90px);
+  max-width:min(62vw,300px);
+  background:var(--papel);color:#191322;
+  font-family:"Permanent Marker",cursive;
+  font-size:clamp(.92rem,2.1vw,1.2rem);line-height:1.35;
+  padding:16px 20px 18px;
+  border-radius:22px 22px 22px 5px;
+  box-shadow:0 16px 38px rgba(0,0,0,.5), 0 0 0 3px rgba(167,139,250,.55), 0 0 30px rgba(124,58,237,.5);
+  animation:bubbleIn .7s cubic-bezier(.2,.7,.2,1) .5s both,
+            bubbleFloat 4.2s ease-in-out 1.3s infinite;
+}
+.speech-bubble::after{
+  content:"";position:absolute;left:30px;bottom:-14px;
+  width:0;height:0;border:15px solid transparent;
+  border-top-color:var(--papel);border-bottom:0;
+}
+@keyframes bubbleIn{
+  from{opacity:0;transform:rotate(-3deg) translateY(-18px) scale(.85)}
+  to{opacity:1;transform:rotate(-3deg) translateY(0) scale(1)}
+}
+@keyframes bubbleFloat{
+  0%,100%{transform:rotate(-3deg) translateY(0)}
+  50%{transform:rotate(-1.5deg) translateY(-9px)}
+}
 
 /* ============ MARQUEE ============ */
 .marquee{
@@ -168,77 +195,6 @@ nav.scrolled::after{
 }
 .reveal.in{opacity:1;transform:translateY(0)}
 
-/* ============ GALERÍA (collage desordenado, se dibuja desde datos) ============ */
-#galeria{background:var(--bg)}
-.collage{
-  position:relative;z-index:1;max-width:1200px;margin:0 auto;
-  display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:72px;
-  grid-auto-flow:dense;gap:18px;
-}
-.it{position:relative}
-.sz-chica{grid-column:span 3;grid-row:span 4}
-.sz-media{grid-column:span 4;grid-row:span 5}
-.sz-alta{grid-column:span 4;grid-row:span 6}
-.sz-grande{grid-column:span 5;grid-row:span 5}
-.sz-ancha{grid-column:span 5;grid-row:span 3}
-.sz-t33{grid-column:span 3;grid-row:span 3}
-.sz-t32{grid-column:span 3;grid-row:span 2}
-
-.frame{
-  height:100%;width:100%;position:relative;
-  transition:transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s ease;
-  box-shadow:0 18px 45px rgba(0,0,0,.55);
-}
-.frame:hover{transform:rotate(0deg) scale(1.035) !important;z-index:20;box-shadow:0 26px 60px rgba(109,40,217,.35)}
-.ph{position:relative;height:100%;width:100%;background:var(--foto) 50% 10% / cover no-repeat;overflow:hidden}
-
-/* tipos de card */
-.f-polaroid{background:var(--papel);padding:12px 12px 46px}
-.f-polaroid .cap{position:absolute;left:14px;bottom:12px;font-family:"Permanent Marker",cursive;color:#191322;font-size:1rem;max-width:90%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.f-borde{border:5px solid var(--tinta)}
-.f-morado{border:6px solid var(--morado-3)}
-.f-papel{border:4px solid var(--papel)}
-.f-pad{background:var(--papel);padding:10px}
-
-/* filtros */
-.flt-bn{filter:grayscale(1) contrast(1.2)}
-.flt-contra{filter:grayscale(1) contrast(1.45) brightness(1.05)}
-.flt-suave{filter:grayscale(.35) saturate(1.25) contrast(1.05)}
-.flt-duo{filter:grayscale(1) contrast(1.1)}
-.flt-duo::after{content:"";position:absolute;inset:0;background:linear-gradient(160deg,rgba(124,58,237,.65),rgba(46,16,101,.72));mix-blend-mode:color}
-
-/* tiles decorativas */
-.t-num .frame{background:repeating-linear-gradient(45deg,rgba(124,58,237,.14) 0 12px,transparent 12px 26px),#16101F;
-  border:1px solid rgba(167,139,250,.2);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px}
-.tile-num{font-family:"Bebas Neue",sans-serif;font-size:4.6rem;line-height:1;color:transparent;-webkit-text-stroke:2px var(--lila)}
-.tile-cap{font-size:.68rem;letter-spacing:.3em;color:var(--gris);text-transform:uppercase}
-.t-vert .frame{background:linear-gradient(170deg,var(--morado-1),#12081f);
-  border:1px solid rgba(167,139,250,.18);display:flex;align-items:center;justify-content:center}
-.vertical{writing-mode:vertical-rl;font-family:"Bebas Neue",sans-serif;font-size:2rem;letter-spacing:.4em;color:var(--lila)}
-.t-code .frame{background:#100C18;border:1px solid rgba(167,139,250,.2);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:14px}
-.barcode{width:78%;height:40px;background:repeating-linear-gradient(90deg,var(--tinta) 0 3px,transparent 3px 7px,var(--tinta) 7px 9px,transparent 9px 15px,var(--tinta) 15px 16px,transparent 16px 21px)}
-.t-xd .frame{background:#0F0B17;border:1px dashed rgba(167,139,250,.4);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
-.xd-big{font-family:"Permanent Marker",cursive;font-size:2.6rem;line-height:1;color:var(--lila);
-  text-shadow:0 0 24px rgba(124,58,237,.6);transform:rotate(-6deg)}
-
-/* cinta adhesiva */
-.tape::before,.tape::after{
-  content:"";position:absolute;width:86px;height:26px;top:-13px;
-  background:rgba(237,234,245,.7);box-shadow:0 3px 8px rgba(0,0,0,.3);
-}
-.tape::before{left:10%;transform:rotate(-8deg)}
-.tape::after{right:8%;transform:rotate(6deg)}
-
-/* sticker giratorio */
-.sticker{
-  position:absolute;right:2%;top:-34px;width:118px;height:118px;z-index:3;
-  animation:spin 16s linear infinite;
-}
-.sticker text{font-family:"Permanent Marker",cursive;font-size:11.5px;fill:var(--lila);letter-spacing:2px}
-@keyframes spin{to{transform:rotate(360deg)}}
-
 /* ============ CONEXIONES ============ */
 #conexiones{background:var(--bg2)}
 .cards{
@@ -285,20 +241,11 @@ nav.scrolled::after{
   .nav-links a{font-size:.72rem;letter-spacing:.1em}
   /* el logo grande y centrado, como en pc */
   #logoSaqes{width:min(78vw,360px)}
-  .collage{grid-template-columns:repeat(6,1fr);grid-auto-rows:58px;gap:13px}
-  .sz-chica{grid-column:span 3;grid-row:span 3}
-  .sz-media{grid-column:span 4;grid-row:span 4}
-  .sz-alta{grid-column:span 4;grid-row:span 5}
-  .sz-grande{grid-column:span 6;grid-row:span 5}
-  .sz-ancha{grid-column:span 6;grid-row:span 3}
-  .sz-t33{grid-column:span 2;grid-row:span 3}
-  .sz-t32{grid-column:span 3;grid-row:span 2}
-  .sticker{width:84px;height:84px;top:-20px}
-  .tape::before,.tape::after{width:58px;height:20px;top:-10px}
+  .speech-bubble{top:clamp(66px,12vh,104px);right:10px;max-width:56vw;font-size:.82rem;padding:12px 16px 14px}
 }
 @media (prefers-reduced-motion:reduce){
-  .marquee-track,.sticker,.scroll-cue svg{animation:none}
-  #logoSaqes,.hero-person{animation:none}
+  .marquee-track,.scroll-cue svg{animation:none}
+  #logoSaqes,.hero-person,.speech-bubble{animation:none}
   .reveal{transition:none;opacity:1;transform:none}
   html{scroll-behavior:auto}
 }
@@ -330,7 +277,6 @@ nav.scrolled::after{
 <!-- ═══════ NAVBAR FLOTANTE ═══════ -->
 <nav id="navbar" aria-label="principal">
   <div class="nav-links">
-    <a href="#galeria">Galería</a>
     <a href="#conexiones">Conexiones</a>
   </div>
 </nav>
@@ -490,7 +436,11 @@ fill="url(#lgrad)" stroke="none">
 <!-- ═══════ BANNER ═══════ -->
 <header class="hero" id="inicio">
   <div class="hero-person" id="heroPerson" role="img" aria-label="foto de saqes"></div>
-  <a class="scroll-cue" href="#galeria" aria-label="bajar a la galería">
+
+  <!-- ✏️ burbuja de texto: el contenido se edita desde el <script> (busca "BUBBLE_TEXT") -->
+  <div class="speech-bubble" id="heroBubble"><span id="heroBubbleText"></span></div>
+
+  <a class="scroll-cue" href="#conexiones" aria-label="bajar a conexiones">
     <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path stroke-width="3" d="M33 5.5C46.5 4.5 58.5 15 58 31c-.5 16.5-11 27.5-26.5 27C16 57.5 5.5 47.5 6 31.5 6.5 16 19.5 6.5 35.5 7"/>
       <path stroke-width="3.4" d="M32.5 19c.4 7-.6 15 .1 23"/>
@@ -507,8 +457,6 @@ fill="url(#lgrad)" stroke="none">
   </div>
 </div>
 
-  <!-- el collage se dibuja desde datos (edítalo desde admin.html) -->
-
 <!-- ═══════ CONEXIONES ═══════ -->
 <section id="conexiones" class="section">
   <div class="blob" style="width:460px;height:460px;background:rgba(109,40,217,.28);bottom:0;right:-160px"></div>
@@ -524,6 +472,10 @@ fill="url(#lgrad)" stroke="none">
 </section>
 
 <script>
+/* ═════════════════ BURBUJA DEL BANNER ═════════════════
+   ✏️ EDITA AQUÍ el texto de la burbuja que sale junto a tu foto. */
+const BUBBLE_TEXT = "¡ey! bienvenid@ a mi mundo 👋";
+
 /* ═════════════════ FIREBASE ═════════════════
    🔥 PEGA AQUÍ tu configuración de Firebase (mira README.md, paso 4).
    Mientras diga "PEGA_AQUI", la página funciona en modo local (localStorage). */
@@ -538,33 +490,24 @@ const FIREBASE_CONFIG = {
 const FB_ON = FIREBASE_CONFIG.projectId !== "PEGA_AQUI";
 
 /* ═════════════════ DATOS ═════════════════
-   La galería y las conexiones se dibujan desde estos datos.
-   Se editan desde admin.html (nube con Firebase, o localStorage en modo local). */
+   Las conexiones se dibujan desde estos datos.
+   Se editan desde admin.html (nube con Firebase, o localStorage en modo local),
+   o directo aquí abajo. */
 const LS_KEY = 'saqes_config_v1';
 
-const DEF_GALERIA = [
-  {tipo:'polaroid', filtro:'bn',     size:'media',  rot:-3.5, cap:'saqes uno', img:null, pos:'50% 8%',  zoom:'200%'},
-  {tipo:'borde',    filtro:'duo',    size:'alta',   rot: 2.5, cap:'',          img:null, pos:'50% 10%', zoom:'cover'},
-  {tipo:'morado',   filtro:'normal', size:'grande', rot:-1.6, cap:'',          img:null, pos:'50% 14%', zoom:'160%'},
-  {tipo:'papel',    filtro:'contra', size:'chica',  rot: 4,   cap:'',          img:null, pos:'46% 40%', zoom:'235%'},
-  {tipo:'pad',      filtro:'suave',  size:'ancha',  rot: 1.8, cap:'',          img:null, pos:'50% 34%', zoom:'200%'}
-];
-
+/* ---------- conexiones / redes sociales ----------
+   ✏️ EDITA CADA TARJETA AQUÍ ABAJO:
+   - user  → el texto que se muestra (tu @ o usuario)
+   - url   → 👉 PEGA AQUÍ el link al que redirige el botón, ej: 'https://tiktok.com/@tuusuario'
+   - foto  → 👉 PEGA AQUÍ el link de TU imagen para esa red, ej: 'https://i.imgur.com/tuimagen.jpg'
+             (déjalo en null para usar el avatar/ícono por defecto) */
 const DEF_CONEX = [
-  {id:'tiktok',  red:'TikTok',      icon:'i-tiktok',  cls:'c-tiktok',  user:'@saqes', url:'#', foto:null},
-  {id:'roblox',  red:'Roblox',      icon:'i-roblox',  cls:'c-roblox',  user:'@saqes', url:'#', foto:null},
-  {id:'ps',      red:'PlayStation', icon:'i-ps',      cls:'c-ps',      user:'saqes',  url:'#', foto:null},
-  {id:'steam',   red:'Steam',       icon:'i-steam',   cls:'c-steam',   user:'saqes',  url:'#', foto:null},
-  {id:'discord', red:'Discord',     icon:'i-discord', cls:'c-discord', user:'saqes',  url:'#', foto:null}
+  {id:'tiktok',  red:'TikTok',      icon:'i-tiktok',  cls:'c-tiktok',  user:'@saqes', url:'#', foto:null}, // 👈 TikTok:      url + foto aquí
+  {id:'roblox',  red:'Roblox',      icon:'i-roblox',  cls:'c-roblox',  user:'@saqes', url:'#', foto:null}, // 👈 Roblox:      url + foto aquí
+  {id:'ps',      red:'PlayStation', icon:'i-ps',      cls:'c-ps',      user:'saqes',  url:'#', foto:null}, // 👈 PlayStation: url + foto aquí
+  {id:'steam',   red:'Steam',       icon:'i-steam',   cls:'c-steam',   user:'saqes',  url:'#', foto:null}, // 👈 Steam:       url + foto aquí
+  {id:'discord', red:'Discord',     icon:'i-discord', cls:'c-discord', user:'saqes',  url:'#', foto:null}  // 👈 Discord:     url + foto aquí
 ];
-
-const TILES = [
-  {size:'sz-t33', rot: 2,   cls:'t-num',  html:'<span class="tile-num">02</span><span class="tile-cap">sin miedo</span>'},
-  {size:'sz-t33', rot:-2,   cls:'t-vert', html:'<span class="vertical">STREET MODE</span>'},
-  {size:'sz-t32', rot: 1.5, cls:'t-code', html:'<div class="barcode"></div><span class="tile-cap">saqes · co</span>'},
-  {size:'sz-t33', rot:-3,   cls:'t-xd',   html:'<span class="xd-big">xd</span><span class="tile-cap">est. 2K26</span>'}
-];
-const SIZES = {chica:'sz-chica', media:'sz-media', alta:'sz-alta', grande:'sz-grande', ancha:'sz-ancha'};
 
 /* ---------- reveal progresivo ---------- */
 const io = new IntersectionObserver(entries => {
@@ -577,7 +520,7 @@ const io = new IntersectionObserver(entries => {
 function getLocal(){
   try{
     const c = JSON.parse(localStorage.getItem(LS_KEY) || 'null');
-    if (c && Array.isArray(c.g) && Array.isArray(c.c)) return c;
+    if (c && Array.isArray(c.c)) return c;
   }catch(e){}
   return null;
 }
@@ -586,55 +529,6 @@ const mergeConex = saved => DEF_CONEX.map(def => {
   const s = saved && saved.find(x => x.id === def.id);
   return s ? {...def, user:s.user ?? def.user, url:s.url ?? def.url, foto:s.foto ?? null} : def;
 });
-
-/* ---------- render galería ---------- */
-function renderGaleria(G){
-  const wrap = document.getElementById('collage');
-  wrap.textContent = '';
-  let d = 0;
-  G.forEach((it, i) => {
-    const cell = document.createElement('div');
-    cell.className = `it reveal ${SIZES[it.size] || 'sz-media'}`;
-    cell.style.setProperty('--d', (d++ % 5 * .06 + .05) + 's');
-
-    const frame = document.createElement('div');
-    const conTape = it.tipo === 'polaroid' || it.tipo === 'morado';
-    frame.className = `frame f-${it.tipo || 'polaroid'}${conTape ? ' tape' : ''}`;
-    frame.style.transform = `rotate(${Number(it.rot) || 0}deg)`;
-
-    const ph = document.createElement('div');
-    ph.className = `ph flt-${it.filtro || 'normal'}`;
-    if (it.img){
-      ph.style.backgroundImage = `url(${it.img})`;
-      ph.style.backgroundPosition = 'center';
-      ph.style.backgroundSize = 'cover';
-    } else {
-      ph.style.backgroundPosition = it.pos || '50% 10%';
-      ph.style.backgroundSize = it.zoom || 'cover';
-    }
-    frame.appendChild(ph);
-
-    if (it.tipo === 'polaroid' && it.cap){
-      const cap = document.createElement('span');
-      cap.className = 'cap';
-      cap.textContent = it.cap;
-      frame.appendChild(cap);
-    }
-    cell.appendChild(frame);
-    wrap.appendChild(cell);
-    io.observe(cell);
-
-    if (i < G.length - 1){
-      const t = TILES[i % TILES.length];
-      const tc = document.createElement('div');
-      tc.className = `it reveal ${t.size} ${t.cls}`;
-      tc.style.setProperty('--d', (d++ % 5 * .06 + .05) + 's');
-      tc.innerHTML = `<div class="frame" style="transform:rotate(${t.rot}deg)">${t.html}</div>`;
-      wrap.appendChild(tc);
-      io.observe(tc);
-    }
-  });
-}
 
 /* ---------- render conexiones ---------- */
 function renderConex(C){
@@ -674,7 +568,6 @@ function renderConex(C){
 }
 
 function applyConfig(cfg){
-  renderGaleria(cfg && cfg.g ? cfg.g : DEF_GALERIA);
   renderConex(mergeConex(cfg ? cfg.c : null));
 }
 
@@ -690,12 +583,10 @@ async function fetchNube(){
       import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js')
     ]);
     const db = fs.getFirestore(initializeApp(FIREBASE_CONFIG));
-    const gs = await fs.getDocs(fs.query(fs.collection(db, 'galeria'), fs.orderBy('orden')));
     const cs = await fs.getDocs(fs.collection(db, 'conexiones'));
-    const g = gs.docs.map(d => d.data());
     const c = cs.docs.map(d => ({id: d.id, ...d.data()}));
-    if (!g.length && !c.length) return null;
-    return {g: g.length ? g : null, c: c.length ? c : null};
+    if (!c.length) return null;
+    return {c};
   }catch(e){
     console.warn('firebase no disponible:', e);
     return null;
@@ -712,7 +603,10 @@ document.getElementById('mq2').textContent = MQ;
 const logo   = document.getElementById('logoSaqes');
 const hero   = document.getElementById('inicio');
 const person = document.getElementById('heroPerson');
+const bubble = document.getElementById('heroBubble');
 const nav    = document.getElementById('navbar');
+
+document.getElementById('heroBubbleText').textContent = BUBBLE_TEXT;
 
 let baseW = 0, baseH = 0, heroH = 0;
 function measure(){
@@ -743,11 +637,12 @@ function paint(){
   logo.style.transform =
     `translate(-50%,-50%) translate3d(${cX}px,${cY}px,0) scale(${s}) rotate(-2deg)`;
 
-  /* la persona desaparece mientras bajas */
+  /* la persona (y su burbuja) desaparecen mientras bajas */
   const pT = Math.min(y / (heroH * 0.45), 1);
   person.style.opacity  = 1 - pT;
   person.style.transform =
     `translate(-50%,0) translateY(${y * 0.18}px) scale(${1 - pT * 0.06})`;
+  if (bubble) bubble.style.opacity = 1 - pT;
 
   nav.classList.toggle('scrolled', y > 40);
 }
